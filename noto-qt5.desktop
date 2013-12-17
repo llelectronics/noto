@@ -1,8 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=noto-qt5
-Icon=icon-launcher-gallery
-Exec=invoker --type=silica-qt5 -s /usr/bin/noto-qt5
-Comment=Sailfish UI application
-
-
