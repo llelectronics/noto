@@ -45,6 +45,7 @@ CoverBackground {
             iconSource: "image://theme/icon-l-copy"
             onTriggered: {
                 pageStack.push(Qt.resolvedUrl("../pages/Note.qml"), {dataContainer: window.initialPage})
+                mainWindow.activate()
             }
         }
 
@@ -52,6 +53,7 @@ CoverBackground {
             iconSource: "image://theme/icon-m-levels"
             onTriggered: {
                 pageStack.push(Qt.resolvedUrl("../pages/Todo.qml"), {dataContainer: window.initialPage})
+                mainWindow.activate()
             }
         }
     }
