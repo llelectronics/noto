@@ -8,25 +8,42 @@ Page {
     property Item contextMenu
 
     property QtObject dataContainer: null
-    property string todoTitleText: null
+    property string todoTitleText
+
+    property bool firstLoad: false
+    property bool todoEdited: false
 
     Component.onCompleted: {
         if (todoTitleText != null) {
             todoPage.listHeaderTextField.text = todoTitleText
             console.log("Get Todos for " + todoTitleText + "...")
+            firstLoad = true
             DB.getTodo(todoTitleText);
+//            firstLoad = false
         }
         //if (noteText != null) note.text = noteText
     }
 
+    onStatusChanged: {
+        if (status === PageStatus.Deactivating) {
+            if (todoPage.listHeaderTextField.text.length > 0 && todoEdited === true) {
+                for (var i = 0; i < todoModel.count; i++) {
+                    // console.debug("Save todo " + todoPage.listHeaderTextField.text + " with text: " + todoModel.get(i).todo + " and status:" + todoModel.get(i).status) // DEBUG
+                    DB.setTodo(todoPage.listHeaderTextField.text,todoModel.get(i).todo,todoModel.get(i).status)
+                }
+                if (dataContainer != null) todoPage.dataContainer.addTodoTitle(todoPage.listHeaderTextField.text)
+            }
+        }
+    }
 
     ListModel {
         id: todoModel
     }
 
     function addTodo(todo,status) {
-        console.debug("Adding todo:" + todo + "with status:" + status)
+        //console.debug("Adding todo:" + todo + "with status:" + status) // DEBUG
         todoModel.append({"todo": todo, "status": status})
+        if (firstLoad === true) { todoEdited = false } else { todoEdited = true }
     }
 
     property TextField listHeaderTextField: null
@@ -39,6 +56,10 @@ Page {
             anchors.leftMargin: 80
             placeholderText: "Title of Todo"
             Component.onCompleted: todoPage.listHeaderTextField = todoTitle
+            onTextChanged: {
+                if (firstLoad === true) { todoEdited = false } else { todoEdited = true }
+                // console.log(todoEdited) // DEBUG
+            }
         }
     }
 
@@ -132,9 +153,11 @@ Page {
                     anchors.verticalCenter: todoText.verticalCenter
                     checked: { if (status == 1) true
                         else false }
-                    onCheckedChanged: {
-                        if (todoModel.get(index).status == 0)  todoModel.get(index).status = 1
-                        else todoModel.get(index).status = 0
+                    onClicked: {
+                            todoEdited = true
+                            if (todoModel.get(index).status == 0)  todoModel.get(index).status = 1
+                            else todoModel.get(index).status = 0
+                            // console.log("Status changed to: " + todoModel.get(index).status) // DEBUG
                     }
                     onPressAndHold: {
                         if (!contextMenu)

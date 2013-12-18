@@ -15,7 +15,7 @@ Page {
         if (status === PageStatus.Deactivating) {
             if (noteTitle.text.length > 0 && textEdited === true) {
                 DB.setNote(noteTitle.text,note.text)
-                console.debug("Save note " + noteTitle.text + " with text: " + note.text)
+                // console.debug("Save note " + noteTitle.text + " with text: " + note.text)
                 if (dataContainer != null) page.dataContainer.addNote(noteTitle.text)
             }
         }
@@ -32,7 +32,7 @@ Page {
                 text: "Save"
                 onClicked: {
                     DB.setNote(noteTitle.text,note.text)
-                    console.debug("Save note " + noteTitle.text + " with text: " + note.text)
+                    //console.debug("Save note " + noteTitle.text + " with text: " + note.text)
                     if (dataContainer != null) page.dataContainer.addNote(noteTitle.text)
                 }
 
@@ -63,7 +63,7 @@ Page {
             placeholderText: "Title of Note"
             focus: true
             onTextChanged: {
-                console.log("Title changed")
+                // console.log("Title changed") // DEBUG
                 textEdited = true
             }
         }
@@ -76,7 +76,7 @@ Page {
             height: page.height - 120
             anchors.top: noteTitle.bottom
             onTextChanged: {
-                console.log("Note changed")
+                // console.log("Note changed") // DEBUG
                 textEdited = true
             }
         }
