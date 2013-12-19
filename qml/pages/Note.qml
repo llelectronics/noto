@@ -34,6 +34,7 @@ Page {
                     DB.setNote(noteTitle.text,note.text)
                     //console.debug("Save note " + noteTitle.text + " with text: " + note.text)
                     if (dataContainer != null) page.dataContainer.addNote(noteTitle.text)
+                    textEdited = false
                 }
 
             }
@@ -65,6 +66,12 @@ Page {
             onTextChanged: {
                 // console.log("Title changed") // DEBUG
                 textEdited = true
+            }
+            Keys.onEnterPressed: {
+                note.forceActiveFocus();
+            }
+            Keys.onReturnPressed: {
+                note.forceActiveFocus();
             }
         }
 

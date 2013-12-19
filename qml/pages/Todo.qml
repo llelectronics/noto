@@ -1,11 +1,9 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import Sailfish.Silica.theme 1.0
 import "../config.js" as DB
 
 Page {
     id: todoPage
-    property Item contextMenu
 
     property QtObject dataContainer: null
     property string todoTitleText
@@ -16,6 +14,7 @@ Page {
     Component.onCompleted: {
         if (todoTitleText != null) {
             todoPage.listHeaderTextField.text = todoTitleText
+            todoPage.listHeaderTextField.forceActiveFocus();
             console.log("Get Todos for " + todoTitleText + "...")
             firstLoad = true
             DB.getTodo(todoTitleText);
@@ -61,6 +60,13 @@ Page {
                 if (firstLoad === true) { todoEdited = false } else { todoEdited = true }
                 // console.log(todoEdited) // DEBUG
             }
+            Keys.onEnterPressed: {
+
+                todoModel.append({ "todo": "", "status": 0});
+            }
+            Keys.onReturnPressed: {
+                todoModel.append({ "todo": "", "status": 0});
+            }
         }
     }
 
@@ -70,8 +76,9 @@ Page {
         height: parent.height
         model: todoModel
         anchors.top : parent.top
-//        anchors.topMargin: 10
+        //        anchors.topMargin: 10
         header: listHeaderComponent
+
         ViewPlaceholder {
             enabled: todoList.count == 0
             text: qsTr("Please insert a todo here")
@@ -92,7 +99,7 @@ Page {
             MenuItem {
                 text: "Insert Todo"
                 onClicked: {
-                    todoModel.append({ "todo": "", "status": 0})
+                    todoModel.append({ "todo": "", "status": 0});
                 }
 
             }
@@ -110,6 +117,7 @@ Page {
             id: myListItem
             property bool menuOpen: contextMenu != null && contextMenu.parent === myListItem
             property int myIndex: index
+            property Item contextMenu
 
             width: ListView.view.width
             height: menuOpen ? contextMenu.height + contentItem.height : contentItem.height
@@ -143,9 +151,19 @@ Page {
                     width: parent.width - todoStatus.width
                     height: todoStatus.height
                     anchors.leftMargin: 10
+                    focus: true
+                    Component.onCompleted: { forceActiveFocus(); }
                     onTextChanged: {
+                        if (firstLoad === true) { todoEdited = false } else { todoEdited = true }
                         todoModel.get(index).todo = text
                     }
+                    Keys.onEnterPressed: {
+                        todoModel.append({ "todo": "", "status": 0});
+                    }
+                    Keys.onReturnPressed: {
+                        todoModel.append({ "todo": "", "status": 0});
+                    }
+
                 }
                 Switch {
                     id: todoStatus
@@ -155,14 +173,14 @@ Page {
                     checked: { if (status == 1) true
                         else false }
                     onClicked: {
-                            todoEdited = true
-                            if (todoModel.get(index).status == 0)  todoModel.get(index).status = 1
-                            else todoModel.get(index).status = 0
-                            // console.log("Status changed to: " + todoModel.get(index).status) // DEBUG
+                        todoEdited = true
+                        if (todoModel.get(index).status == 0)  todoModel.get(index).status = 1
+                        else todoModel.get(index).status = 0
+                        // console.log("Status changed to: " + todoModel.get(index).status) // DEBUG
                     }
                     onPressAndHold: {
                         if (!contextMenu)
-                            contextMenu = contextMenuComponent.createObject(todoList)
+                           contextMenu = contextMenuComponent.createObject(todoList)
                         contextMenu.show(myListItem)
                     }
                 }
@@ -189,7 +207,7 @@ Page {
                     id: menu
                     MenuItem {
                         text: "Delete"
-                        onClicked: menu.parent.remove()
+                        onClicked: menu.parent.remove(1);
                     }
                 }
             }

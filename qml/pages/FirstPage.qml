@@ -30,12 +30,10 @@
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import Sailfish.Silica.theme 1.0
 import "../config.js" as DB
 
 Page {
     id: root
-    property Item contextMenu
 
     function addNote(title) {
         notoModel.append({"title": title, "type": "note"})
@@ -110,6 +108,7 @@ Page {
             id: myListItem
             property bool menuOpen: contextMenu != null && contextMenu.parent === myListItem
             property int myIndex: index
+            property Item contextMenu
 
             width: ListView.view.width
             height: menuOpen ? contextMenu.height + contentItem.height : contentItem.height
@@ -174,8 +173,6 @@ Page {
                         text: "Delete"
                         onClicked: {
                             menu.parent.remove();
-                            // Don't forget to destroy the contextMenu Object
-                            contextMenu.destroy();
                         }
                     }
                 }
