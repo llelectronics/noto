@@ -19,7 +19,7 @@ Page {
             console.log("Get Todos for " + todoTitleText + "...")
             firstLoad = true
             DB.getTodo(todoTitleText);
-//            firstLoad = false
+            firstLoad = false
         }
         //if (noteText != null) note.text = noteText
     }
@@ -56,6 +56,7 @@ Page {
             anchors.leftMargin: 80
             placeholderText: "Title of Todo"
             Component.onCompleted: todoPage.listHeaderTextField = todoTitle
+            focus: true
             onTextChanged: {
                 if (firstLoad === true) { todoEdited = false } else { todoEdited = true }
                 // console.log(todoEdited) // DEBUG
@@ -69,7 +70,7 @@ Page {
         height: parent.height
         model: todoModel
         anchors.top : parent.top
-        anchors.topMargin: 20
+//        anchors.topMargin: 10
         header: listHeaderComponent
         ViewPlaceholder {
             enabled: todoList.count == 0

@@ -1,6 +1,6 @@
 /*
-  Copyright (C) 2013 Jolla Ltd.
-  Contact: Thomas Perl <thomas.perl@jollamobile.com>
+  Copyright (C) 2013 Leszek Lesner.
+  Contact: Leszek Lesner <leszek.lesner@googlemail.com>
   All rights reserved.
 
   You may use this file under the terms of BSD license as follows:
@@ -34,26 +34,50 @@ import Sailfish.Silica 1.0
 
 Page {
     id: page
-    SilicaListView {
-        id: listView
-        model: 20
-        anchors.fill: parent
-        header: PageHeader {
-            title: "Nested Page"
-        }
-        delegate: BackgroundItem {
-            id: delegate
 
-            Label {
-                x: Theme.paddingLarge
-                text: "Item " + index
-                anchors.verticalCenter: parent.verticalCenter
-                color: delegate.highlighted ? Theme.highlightColor : Theme.primaryColor
-            }
-            onClicked: console.log("Clicked " + index)
-        }
-        VerticalScrollDecorator {}
+
+
+    Image {
+        id: logo
+        source: "noto.png"
+        anchors.horizontalCenter: parent.horizontalCenter
+        y: 200
     }
+
+    Label {
+        id: appName
+        anchors.horizontalCenter: parent.horizontalCenter
+        y: 320
+        font.bold: true
+        text: "Noto 1.0"
+    }
+    Text {
+        id: desc
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: appName.bottom
+        anchors.topMargin: 20
+        text: "Simple note and todo taking application"
+        color: "white"
+    }
+    Text {
+        id: copyright
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: desc.bottom
+        anchors.topMargin: 20
+        text: "Copyright: Leszek Lesner <br />License: BSD (3-clause)"
+        color: "white"
+    }
+    Button {
+        id: homepage
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: copyright.bottom
+        anchors.topMargin: 20
+        text: "<a href=\"https://github.com/llelectronics/noto\">https://github.com/llelectronics/noto</a>"
+        onClicked: {
+            Qt.openUrlExternally("https://github.com/llelectronics/noto")
+        }
+    }
+
 }
 
 

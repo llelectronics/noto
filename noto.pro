@@ -15,11 +15,11 @@ SOURCES += src/noto.cpp
 OTHER_FILES += qml/noto.qml \
     qml/cover/CoverPage.qml \
     qml/pages/FirstPage.qml \
-    qml/pages/SecondPage.qml \
     rpm/noto.spec \
     rpm/noto.yaml \
     noto.desktop \
     qml/pages/Todo.qml \
     qml/pages/Note.qml \
-    qml/config.js
+    qml/config.js \
+    qml/pages/About.qml
 

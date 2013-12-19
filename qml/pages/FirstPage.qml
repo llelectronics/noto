@@ -1,6 +1,6 @@
 /*
-  Copyright (C) 2013 Jolla Ltd.
-  Contact: Thomas Perl <thomas.perl@jollamobile.com>
+  Copyright (C) 2013 Leszek Lesner.
+  Contact: Leszek Lesner <leszek.lesner@googlemail.com>
   All rights reserved.
 
   You may use this file under the terms of BSD license as follows:
@@ -80,6 +80,12 @@ Page {
             text: qsTr("Please create a note or todo")
         }
         PullDownMenu {
+            MenuItem {
+                text: "About"
+                onClicked: {
+                    pageStack.push(Qt.resolvedUrl("About.qml"), {dataContainer: root})
+                }
+            }
             MenuItem {
                 text: "Add Note"
                 onClicked: {
