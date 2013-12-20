@@ -6,7 +6,7 @@
 #         - desktop icon filename must be changed
 #         - desktop filename must be changed
 #         - icon definition filename in desktop file must be changed
-TARGET = noto
+TARGET = harbour-noto
 
 CONFIG += sailfishapp
 
@@ -15,11 +15,11 @@ SOURCES += src/noto.cpp
 OTHER_FILES += qml/noto.qml \
     qml/cover/CoverPage.qml \
     qml/pages/FirstPage.qml \
-    rpm/noto.spec \
-    rpm/noto.yaml \
-    noto.desktop \
+    rpm/harbour-noto.yaml \
     qml/pages/Todo.qml \
     qml/pages/Note.qml \
     qml/config.js \
-    qml/pages/About.qml
+    qml/pages/About.qml \
+    harbour-noto.desktop \
+    rpm/harbour-noto.spec
 
