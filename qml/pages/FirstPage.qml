@@ -40,7 +40,7 @@ Page {
     }
 
     function addTodoTitle(title) {
-        notoModel.append({"title": title, "type": "todo"})
+        notoModel.append({"title": title, "type": "todo", "uid": ""})
     }
 
     function getNotes() {
@@ -116,7 +116,7 @@ Page {
             function remove() {
                 var removal = removalComponent.createObject(myListItem)
                 ListView.remove.connect(removal.deleteAnimation.start)
-                removal.execute(contentItem, "Deleting", function() { if (type != "note") var uid = 0; DB.remove(title,type,uid); notoModel.remove(index); } )
+                removal.execute(contentItem, "Deleting", function() { if (type != "note") uid = 0; DB.remove(title,type,uid); notoModel.remove(index); } )
             }
 
             BackgroundItem {

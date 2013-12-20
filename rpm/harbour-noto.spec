@@ -12,12 +12,12 @@ Name:       harbour-noto
 %{!?qtc_qmake5:%define qtc_qmake5 %qmake5}
 %{!?qtc_make:%define qtc_make make}
 %{?qtc_builddir:%define _builddir %qtc_builddir}
-Summary:    Note and Todo taking application
+Summary:    Simple note and todo taking application
 Version:    1.0
-Release:    2
+Release:    1
 Group:      Qt/Qt
-License:    BSD (3-clause)
-URL:        https://github.com/llelectronics/noto
+License:    LICENSE
+URL:        http://example.org/
 Source0:    %{name}-%{version}.tar.bz2
 Source100:  harbour-noto.yaml
 Requires:   sailfishsilica-qt5 >= 0.10.9
@@ -68,7 +68,7 @@ desktop-file-install --delete-original       \
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/86x86/apps/%{name}.png
 /usr/bin
-/usr/share/noto
+/usr/share/harbour-noto
 /usr/share/applications
 /usr/share/icons/hicolor/86x86/apps
 # >> files

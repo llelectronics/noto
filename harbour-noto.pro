@@ -10,16 +10,17 @@ TARGET = harbour-noto
 
 CONFIG += sailfishapp
 
-SOURCES += src/noto.cpp
+SOURCES += src/harbour-noto.cpp
 
-OTHER_FILES += qml/noto.qml \
+OTHER_FILES += qml/harbour-noto.qml \
+    qml/config.js \
     qml/cover/CoverPage.qml \
     qml/pages/FirstPage.qml \
-    rpm/harbour-noto.yaml \
-    qml/pages/Todo.qml \
-    qml/pages/Note.qml \
-    qml/config.js \
     qml/pages/About.qml \
-    harbour-noto.desktop \
-    rpm/harbour-noto.spec
+    qml/pages/Note.qml \
+    qml/pages/Todo.qml \
+    qml/pages/noto.png \
+    rpm/harbour-noto.spec \
+    rpm/harbour-noto.yaml \
+    harbour-noto.desktop
 

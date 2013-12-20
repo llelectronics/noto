@@ -29,6 +29,7 @@ Page {
 
     onStatusChanged: {
         if (status === PageStatus.Deactivating) {
+            console.log("TodoEdited:" + todoEdited)
             if (todoPage.listHeaderTextField.text.length > 0 && todoEdited === true) {
                 for (var i = 0; i < todoModel.count; i++) {
                     // console.debug("Save todo " + todoPage.listHeaderTextField.text + " with text: " + todoModel.get(i).todo + " and status:" + todoModel.get(i).status) // DEBUG
@@ -189,6 +190,7 @@ Page {
                     checked: { if (status == 1) true
                         else false }
                     onClicked: {
+                        firstLoad = false
                         todoEdited = true
                         if (todoModel.get(index).status == 0)  {
                             todoModel.get(index).status = 1;
@@ -198,7 +200,7 @@ Page {
                             todoModel.get(index).status = 0
                             todoList.move(index,0)
                         }
-                        // console.log("Status changed to: " + todoModel.get(index).status) // DEBUG
+                        console.log("Status changed to: " + todoModel.get(index).status + " todoEdited:" + todoEdited) // DEBUG
                     }
                     onPressAndHold: {
                         if (!contextMenu)
