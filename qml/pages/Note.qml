@@ -8,16 +8,26 @@ Page {
     property QtObject dataContainer: null
     property string noteTitleText
     property string noteText
+    property real noteUid: 0
     // used to detect if text was edited so that we don't always write something to database if we swipe back.
     property bool textEdited: false
 
+
+    function saveChanged() {
+        if (noteTitle.text.length > 0 && textEdited === true) {
+            console.log(noteUid)
+            if (noteUid == 0) noteUid = DB.getUniqueId()
+            console.log(noteUid)
+            DB.setNote(noteUid,noteTitle.text,note.text)
+            console.debug("Save note " + noteTitle.text + " with text: " + note.text + " with uid:" + noteUid)
+            if (dataContainer != null) page.dataContainer.addNote(noteTitle.text,noteUid)
+        }
+    }
+
+
     onStatusChanged: {
         if (status === PageStatus.Deactivating) {
-            if (noteTitle.text.length > 0 && textEdited === true) {
-                DB.setNote(noteTitle.text,note.text)
-                // console.debug("Save note " + noteTitle.text + " with text: " + note.text)
-                if (dataContainer != null) page.dataContainer.addNote(noteTitle.text)
-            }
+            saveChanged();
         }
     }
 
@@ -31,10 +41,8 @@ Page {
             MenuItem {
                 text: "Save"
                 onClicked: {
-                    DB.setNote(noteTitle.text,note.text)
-                    //console.debug("Save note " + noteTitle.text + " with text: " + note.text)
-                    if (dataContainer != null) page.dataContainer.addNote(noteTitle.text)
-                    textEdited = false
+                    saveChanged();
+                    textEdited = false;
                 }
 
             }

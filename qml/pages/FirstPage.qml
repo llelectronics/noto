@@ -35,8 +35,8 @@ import "../config.js" as DB
 Page {
     id: root
 
-    function addNote(title) {
-        notoModel.append({"title": title, "type": "note"})
+    function addNote(title,uid) {
+        notoModel.append({"title": title, "type": "note", "uid":uid})
     }
 
     function addTodoTitle(title) {
@@ -87,7 +87,7 @@ Page {
             MenuItem {
                 text: "Add Note"
                 onClicked: {
-                    pageStack.push(Qt.resolvedUrl("Note.qml"), {dataContainer: root})
+                    pageStack.push(Qt.resolvedUrl("Note.qml"), {dataContainer: root, noteUid: 0})
                 }
             }
             MenuItem {
@@ -116,8 +116,7 @@ Page {
             function remove() {
                 var removal = removalComponent.createObject(myListItem)
                 ListView.remove.connect(removal.deleteAnimation.start)
-                removal.execute(contentItem, "Deleting", function() { notoModel.remove(index) } )
-                DB.remove(title,type)
+                removal.execute(contentItem, "Deleting", function() { if (type != "note") var uid = 0; DB.remove(title,type,uid); notoModel.remove(index); } )
             }
 
             BackgroundItem {
@@ -132,7 +131,7 @@ Page {
                 onClicked: {
                     console.log("Clicked " + title)
                     if (type === "note") {
-                        pageStack.push(Qt.resolvedUrl("Note.qml"), {noteTitleText: title, noteText: DB.getText(title)} )
+                        pageStack.push(Qt.resolvedUrl("Note.qml"), {noteTitleText: title, noteText: DB.getText(title,uid), noteUid: uid} )
                         console.debug("Text:" + DB.getText(title))
                     }
                     if (type === "todo") {

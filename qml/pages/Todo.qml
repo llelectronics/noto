@@ -15,12 +15,16 @@ Page {
         if (todoTitleText != null) {
             todoPage.listHeaderTextField.text = todoTitleText
             todoPage.listHeaderTextField.forceActiveFocus();
-            console.log("Get Todos for " + todoTitleText + "...")
+            //console.log("Get Todos for " + todoTitleText + "...")
             firstLoad = true
             DB.getTodo(todoTitleText);
-            firstLoad = false
+
         }
         //if (noteText != null) note.text = noteText
+    }
+
+    function setFirstLoadFalse() {
+        firstLoad = false;
     }
 
     onStatusChanged: {
@@ -42,7 +46,9 @@ Page {
     function addTodo(todo,status) {
         //console.debug("Adding todo:" + todo + "with status:" + status) // DEBUG
         todoModel.append({"todo": todo, "status": status})
+        if (status === 0) todoList.move(todoList.count-1, 0);
         if (firstLoad === true) { todoEdited = false } else { todoEdited = true }
+        //console.debug("addtodo todoedited=" + todoEdited)
     }
 
     property TextField listHeaderTextField: null
@@ -58,15 +64,15 @@ Page {
             focus: true
             onTextChanged: {
                 if (firstLoad === true) { todoEdited = false } else { todoEdited = true }
-                // console.log(todoEdited) // DEBUG
+                //console.debug("onTextChanged listHeader todoedited=" + todoEdited)
             }
             Keys.onEnterPressed: {
-
                 todoModel.append({ "todo": "", "status": 0});
             }
             Keys.onReturnPressed: {
                 todoModel.append({ "todo": "", "status": 0});
             }
+            onClicked: firstLoad = false
         }
     }
 
@@ -78,6 +84,12 @@ Page {
         anchors.top : parent.top
         //        anchors.topMargin: 10
         header: listHeaderComponent
+
+        function move(sourceIndex,targetIndex) {
+            if(targetIndex >= 0 && targetIndex < todoModel.count){
+                todoModel.move(sourceIndex, targetIndex, 1)
+            }
+        }
 
         ViewPlaceholder {
             enabled: todoList.count == 0
@@ -125,9 +137,9 @@ Page {
             function remove() {
                 var removal = removalComponent.createObject(myListItem)
                 ListView.remove.connect(removal.deleteAnimation.start)
-                removal.execute(contentItem, "Deleting", function() { todoModel.remove(index) } )
-                DB.removeTodoEntry(todoPage.listHeaderTextField.text,todo)
+                removal.execute(contentItem, "Deleting", function() { DB.removeTodoEntry(todoPage.listHeaderTextField.text,todo) ; todoModel.remove(index) } )
             }
+
 
             BackgroundItem {
                 id: contentItem
@@ -142,7 +154,6 @@ Page {
                     console.log("Clicked " + todo)
                 }
 
-
                 TextField {
                     id: todoText
                     text: todo
@@ -152,9 +163,13 @@ Page {
                     height: todoStatus.height
                     anchors.leftMargin: 10
                     focus: true
-                    Component.onCompleted: { forceActiveFocus(); }
+                    color: {
+                        if (status == 0) return "white"
+                        else return "gray"
+                    }
                     onTextChanged: {
                         if (firstLoad === true) { todoEdited = false } else { todoEdited = true }
+                        //console.debug("todoText textchanged todoedited=" + todoEdited)
                         todoModel.get(index).todo = text
                     }
                     Keys.onEnterPressed: {
@@ -163,6 +178,7 @@ Page {
                     Keys.onReturnPressed: {
                         todoModel.append({ "todo": "", "status": 0});
                     }
+                    onClicked: firstLoad = false
 
                 }
                 Switch {
@@ -174,13 +190,19 @@ Page {
                         else false }
                     onClicked: {
                         todoEdited = true
-                        if (todoModel.get(index).status == 0)  todoModel.get(index).status = 1
-                        else todoModel.get(index).status = 0
+                        if (todoModel.get(index).status == 0)  {
+                            todoModel.get(index).status = 1;
+                            todoList.move(index,todoModel.count-1);
+                        }
+                        else {
+                            todoModel.get(index).status = 0
+                            todoList.move(index,0)
+                        }
                         // console.log("Status changed to: " + todoModel.get(index).status) // DEBUG
                     }
                     onPressAndHold: {
                         if (!contextMenu)
-                           contextMenu = contextMenuComponent.createObject(todoList)
+                            contextMenu = contextMenuComponent.createObject(todoList)
                         contextMenu.show(myListItem)
                     }
                 }
