@@ -29,11 +29,11 @@ Page {
 
     onStatusChanged: {
         if (status === PageStatus.Deactivating) {
-            console.log("TodoEdited:" + todoEdited)
+            //console.log("TodoEdited:" + todoEdited)
             if (todoPage.listHeaderTextField.text.length > 0 && todoEdited === true) {
                 for (var i = 0; i < todoModel.count; i++) {
-                    // console.debug("Save todo " + todoPage.listHeaderTextField.text + " with text: " + todoModel.get(i).todo + " and status:" + todoModel.get(i).status) // DEBUG
-                    DB.setTodo(todoPage.listHeaderTextField.text,todoModel.get(i).todo,todoModel.get(i).status)
+                    //console.debug("Save todo " + todoPage.listHeaderTextField.text + " with text: " + todoModel.get(i).todo + " and status:" + todoModel.get(i).status + " and uid:" + todoModel.get(i).uid) // DEBUG
+                    DB.setTodo(todoPage.listHeaderTextField.text,todoModel.get(i).todo,todoModel.get(i).status,todoModel.get(i).uid)
                 }
                 if (dataContainer != null) todoPage.dataContainer.addTodoTitle(todoPage.listHeaderTextField.text)
             }
@@ -44,9 +44,9 @@ Page {
         id: todoModel
     }
 
-    function addTodo(todo,status) {
-        //console.debug("Adding todo:" + todo + "with status:" + status) // DEBUG
-        todoModel.append({"todo": todo, "status": status})
+    function addTodo(todo,status,uid) {
+        //console.debug("Adding todo:" + todo + "with status:" + status + " and uid:" + uid) // DEBUG
+        todoModel.append({"todo": todo, "status": status, "uid": uid})
         if (status === 0) todoList.move(todoList.count-1, 0);
         if (firstLoad === true) { todoEdited = false } else { todoEdited = true }
         //console.debug("addtodo todoedited=" + todoEdited)
@@ -68,10 +68,10 @@ Page {
                 //console.debug("onTextChanged listHeader todoedited=" + todoEdited)
             }
             Keys.onEnterPressed: {
-                todoModel.append({ "todo": "", "status": 0});
+                todoModel.append({ "todo": "", "status": 0, "uid" : DB.getUniqueId()});
             }
             Keys.onReturnPressed: {
-                todoModel.append({ "todo": "", "status": 0});
+                todoModel.append({ "todo": "", "status": 0, "uid" : DB.getUniqueId()});
             }
             onClicked: firstLoad = false
         }
@@ -102,8 +102,8 @@ Page {
                 onClicked: {
                     //DB.setTodo(todoTitle.text,todo.text,status)
                     for (var i = 0; i < todoModel.count; i++) {
-                        console.debug("Save todo " + todoPage.listHeaderTextField.text + " with text: " + todoModel.get(i).todo + " and status:" + todoModel.get(i).status)
-                        DB.setTodo(todoPage.listHeaderTextField.text,todoModel.get(i).todo,todoModel.get(i).status)
+//                        console.debug("Save todo " + todoPage.listHeaderTextField.text + " with text: " + todoModel.get(i).todo + " and status:" + todoModel.get(i).status)
+                        DB.setTodo(todoPage.listHeaderTextField.text,todoModel.get(i).todo,todoModel.get(i).status,todoModel.get(i).uid)
                     }
                     if (dataContainer != null) todoPage.dataContainer.addTodoTitle(todoPage.listHeaderTextField.text)
                 }
@@ -112,7 +112,7 @@ Page {
             MenuItem {
                 text: "Insert Todo"
                 onClicked: {
-                    todoModel.append({ "todo": "", "status": 0});
+                    todoModel.append({ "todo": "", "status": 0, "uid" : DB.getUniqueId()});
                 }
 
             }
@@ -138,7 +138,7 @@ Page {
             function remove() {
                 var removal = removalComponent.createObject(myListItem)
                 ListView.remove.connect(removal.deleteAnimation.start)
-                removal.execute(contentItem, "Deleting", function() { DB.removeTodoEntry(todoPage.listHeaderTextField.text,todo) ; todoModel.remove(index) } )
+                removal.execute(contentItem, "Deleting", function() { DB.removeTodoEntry(todoPage.listHeaderTextField.text,todo,uid) ; todoModel.remove(index) } )
             }
 
 
@@ -174,10 +174,10 @@ Page {
                         todoModel.get(index).todo = text
                     }
                     Keys.onEnterPressed: {
-                        todoModel.append({ "todo": "", "status": 0});
+                        todoModel.append({ "todo": "", "status": 0, "uid": DB.getUniqueId()});
                     }
                     Keys.onReturnPressed: {
-                        todoModel.append({ "todo": "", "status": 0});
+                        todoModel.append({ "todo": "", "status": 0, "uid": DB.getUniqueId()});
                     }
                     onClicked: firstLoad = false
 
@@ -200,7 +200,7 @@ Page {
                             todoModel.get(index).status = 0
                             todoList.move(index,0)
                         }
-                        console.log("Status changed to: " + todoModel.get(index).status + " todoEdited:" + todoEdited) // DEBUG
+//                        console.log("Status changed to: " + todoModel.get(index).status + " todoEdited:" + todoEdited) // DEBUG
                     }
                     onPressAndHold: {
                         if (!contextMenu)
