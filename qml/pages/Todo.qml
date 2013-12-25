@@ -106,6 +106,7 @@ Page {
                         DB.setTodo(todoPage.listHeaderTextField.text,todoModel.get(i).todo,todoModel.get(i).status,todoModel.get(i).uid)
                     }
                     if (dataContainer != null) todoPage.dataContainer.addTodoTitle(todoPage.listHeaderTextField.text)
+                    todoEdited = false
                 }
 
             }
