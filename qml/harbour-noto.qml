@@ -1,4 +1,7 @@
 /*
+  Copyright (C) 2013 Leszek Lesner.
+  Contact: Leszek Lesner <leszek.lesner@googlemail.com>
+  Originated from:
   Copyright (C) 2013 Jolla Ltd.
   Contact: Thomas Perl <thomas.perl@jollamobile.com>
   All rights reserved.
@@ -35,7 +38,15 @@ import "pages"
 ApplicationWindow
 {
     id: mainWindow
-    initialPage: Component { FirstPage { } }
+
+    property Item firstPage
+    initialPage: Component {
+        FirstPage {
+            id: firstPage
+
+            Component.onCompleted: mainWindow.firstPage = firstPage
+        }
+    }
     cover: Qt.resolvedUrl("cover/CoverPage.qml")
 }
 

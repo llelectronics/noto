@@ -44,7 +44,7 @@ CoverBackground {
         CoverAction {
             iconSource: "image://theme/icon-l-copy"
             onTriggered: {
-                pageStack.push(Qt.resolvedUrl("../pages/Note.qml"), {dataContainer: window.initialPage})
+                pageStack.push(Qt.resolvedUrl("../pages/Note.qml"), {dataContainer: mainWindow.firstPage})
                 mainWindow.activate()
             }
         }
@@ -52,7 +52,7 @@ CoverBackground {
         CoverAction {
             iconSource: "image://theme/icon-m-levels"
             onTriggered: {
-                pageStack.push(Qt.resolvedUrl("../pages/Todo.qml"), {dataContainer: window.initialPage})
+                pageStack.push(Qt.resolvedUrl("../pages/Todo.qml"), {dataContainer: mainWindow.firstPage})
                 mainWindow.activate()
             }
         }
