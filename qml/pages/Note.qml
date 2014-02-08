@@ -12,6 +12,8 @@ Page {
     // used to detect if text was edited so that we don't always write something to database if we swipe back.
     property bool textEdited: false
 
+    showNavigationIndicator: mainWindow.applicationActive ? true : false
+
 
     function saveChanged() {
         if (noteTitle.text.length > 0 && textEdited === true) {
@@ -38,6 +40,7 @@ Page {
 
         // PullDownMenu and PushUpMenu must be declared in SilicaFlickable, SilicaListView or SilicaGridView
         PullDownMenu {
+            visible: mainWindow.applicationActive ? true : false
             MenuItem {
                 text: "Save"
                 onClicked: {
@@ -71,6 +74,8 @@ Page {
             anchors.leftMargin: 80
             placeholderText: "Title of Note"
             focus: true
+            font.pixelSize: mainWindow.applicationActive ? Theme.fontSizeMedium : Theme.fontSizeHuge
+            color: mainWindow.applicationActive ? Theme.primaryColor : Theme.highlightColor
             onTextChanged: {
                 // console.log("Title changed") // DEBUG
                 textEdited = true
@@ -94,6 +99,7 @@ Page {
                 // console.log("Note changed") // DEBUG
                 textEdited = true
             }
+            font.pixelSize: mainWindow.applicationActive ? Theme.fontSizeSmall : Theme.fontSizeHuge
         }
 
     }

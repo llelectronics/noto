@@ -40,6 +40,7 @@ ApplicationWindow
     id: mainWindow
 
     property Item firstPage
+    property alias coverAction: coverAction
     initialPage: Component {
         FirstPage {
             id: firstPage
@@ -47,7 +48,27 @@ ApplicationWindow
             Component.onCompleted: mainWindow.firstPage = firstPage
         }
     }
-    cover: Qt.resolvedUrl("cover/CoverPage.qml")
+    //cover: Qt.resolvedUrl("cover/CoverPage.qml")
+    cover: undefined
+    CoverActionList {
+        id: coverAction
+
+        CoverAction {
+            iconSource: "image://theme/icon-l-copy"
+            onTriggered: {
+                pageStack.push(Qt.resolvedUrl("pages/Note.qml"), {dataContainer: mainWindow.firstPage})
+                mainWindow.activate()
+            }
+        }
+
+        CoverAction {
+            iconSource: "image://theme/icon-m-levels"
+            onTriggered: {
+                pageStack.push(Qt.resolvedUrl("pages/Todo.qml"), {dataContainer: mainWindow.firstPage})
+                mainWindow.activate()
+            }
+        }
+    }
 }
 
 

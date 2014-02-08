@@ -11,6 +11,8 @@ Page {
     property bool firstLoad: false
     property bool todoEdited: false
 
+    showNavigationIndicator: mainWindow.applicationActive ? true : false
+
     Component.onCompleted: {
         if (todoTitleText != null) {
             todoPage.listHeaderTextField.text = todoTitleText
@@ -26,6 +28,8 @@ Page {
     function setFirstLoadFalse() {
         firstLoad = false;
     }
+
+
 
     onStatusChanged: {
         if (status === PageStatus.Deactivating) {
@@ -55,25 +59,31 @@ Page {
     property TextField listHeaderTextField: null
     Component {
         id: listHeaderComponent
-        TextField {
-            id: todoTitle
-            width: parent.width - 120
-            anchors.left: parent.left
-            anchors.leftMargin: 80
-            placeholderText: "Title of Todo"
-            Component.onCompleted: todoPage.listHeaderTextField = todoTitle
-            focus: true
-            onTextChanged: {
-                if (firstLoad === true) { todoEdited = false } else { todoEdited = true }
-                //console.debug("onTextChanged listHeader todoedited=" + todoEdited)
+        PageHeader {
+            TextField {
+                id: todoTitle
+                width: parent.width - 120
+                anchors.left: parent.left
+                anchors.leftMargin: 80
+                anchors.top: parent.top
+                anchors.topMargin: 25
+                placeholderText: "Title of Todo"
+                Component.onCompleted: todoPage.listHeaderTextField = todoTitle
+                focus: true
+                font.pixelSize: mainWindow.applicationActive ? Theme.fontSizeMedium : Theme.fontSizeHuge
+                color: mainWindow.applicationActive ? Theme.primaryColor : Theme.highlightColor
+                onTextChanged: {
+                    if (firstLoad === true) { todoEdited = false } else { todoEdited = true }
+                    //console.debug("onTextChanged listHeader todoedited=" + todoEdited)
+                }
+                Keys.onEnterPressed: {
+                    todoModel.append({ "todo": "", "status": 0, "uid" : DB.getUniqueId()});
+                }
+                Keys.onReturnPressed: {
+                    todoModel.append({ "todo": "", "status": 0, "uid" : DB.getUniqueId()});
+                }
+                onClicked: firstLoad = false
             }
-            Keys.onEnterPressed: {
-                todoModel.append({ "todo": "", "status": 0, "uid" : DB.getUniqueId()});
-            }
-            Keys.onReturnPressed: {
-                todoModel.append({ "todo": "", "status": 0, "uid" : DB.getUniqueId()});
-            }
-            onClicked: firstLoad = false
         }
     }
 
@@ -83,7 +93,7 @@ Page {
         height: parent.height
         model: todoModel
         anchors.top : parent.top
-        //        anchors.topMargin: 10
+        //anchors.topMargin: 10
         header: listHeaderComponent
 
         function move(sourceIndex,targetIndex) {
@@ -97,6 +107,7 @@ Page {
             text: qsTr("Please insert a todo here")
         }
         PullDownMenu {
+            visible: mainWindow.applicationActive ? true : false
             MenuItem {
                 text: "Save"
                 onClicked: {
@@ -142,19 +153,24 @@ Page {
                 removal.execute(contentItem, "Deleting", function() { DB.removeTodoEntry(todoPage.listHeaderTextField.text,todo,uid) ; todoModel.remove(index) } )
             }
 
+            ListView.onAdd: {
+                todoText.forceActiveFocus();
+            }
 
-            BackgroundItem {
+            //BackgroundItem {
+            FocusScope {
                 id: contentItem
 
                 width: parent.width
-                onPressAndHold: {
-                    if (!contextMenu)
-                        contextMenu = contextMenuComponent.createObject(notoList)
-                    contextMenu.show(myListItem)
-                }
-                onClicked: {
-                    console.log("Clicked " + todo)
-                }
+                height: childrenRect.height
+//                onPressAndHold: {
+//                    if (!contextMenu)
+//                        contextMenu = contextMenuComponent.createObject(notoList)
+//                    contextMenu.show(myListItem)
+//                }
+//                onClicked: {
+//                    console.log("Clicked " + todo)
+//                }
 
                 TextField {
                     id: todoText
@@ -162,9 +178,11 @@ Page {
                     placeholderText: "Enter new todo here"
                     anchors.left: parent.left
                     width: parent.width - todoStatus.width
-                    height: todoStatus.height
+                    height: mainWindow.applicationActive ? todoStatus.height + Theme.paddingMedium : todoStatus.height + Theme.paddingLarge
                     anchors.leftMargin: 10
                     focus: true
+                    font.pixelSize: mainWindow.applicationActive ? Theme.fontSizeSmall : Theme.fontSizeHuge
+
                     color: {
                         if (status == 0) return "white"
                         else return "gray"
@@ -180,6 +198,15 @@ Page {
                     Keys.onReturnPressed: {
                         todoModel.append({ "todo": "", "status": 0, "uid": DB.getUniqueId()});
                     }
+                    onFocusChanged: if (focus == false) {
+                                        if (todoModel.get(index).status != 0)  {
+                                            todoList.move(index,todoModel.count-1);
+                                        }
+                                        else {
+                                            todoList.move(index,0)
+                                        }
+                                    }
+
                     onClicked: firstLoad = false
 
                 }
@@ -188,6 +215,8 @@ Page {
                     anchors.right: parent.right
                     anchors.rightMargin: 10
                     anchors.verticalCenter: todoText.verticalCenter
+                    width: 72
+                    height: mainWindow.applicationActive ? 77 : 128
                     checked: { if (status == 1) true
                         else false }
                     onClicked: {
