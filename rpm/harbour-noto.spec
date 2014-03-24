@@ -13,8 +13,8 @@ Name:       harbour-noto
 %{!?qtc_make:%define qtc_make make}
 %{?qtc_builddir:%define _builddir %qtc_builddir}
 Summary:    Simple note and todo taking application
-Version:    1.0
-Release:    4
+Version:    1.1
+Release:    1
 Group:      Qt/Qt
 License:    LICENSE
 URL:        http://example.org/

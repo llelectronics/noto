@@ -68,7 +68,7 @@ Page {
         TextField {
             id: noteTitle
             anchors.top: parent.top
-            width: parent.width - 120
+            width: parent.width - 160
             anchors.topMargin: 20
             anchors.left: parent.left
             anchors.leftMargin: 80
@@ -98,8 +98,15 @@ Page {
             onTextChanged: {
                 // console.log("Note changed") // DEBUG
                 textEdited = true
+                autoSaveTimer.restart()
             }
+            background: null // Deactivate bottom border
             font.pixelSize: mainWindow.applicationActive ? Theme.fontSizeSmall : Theme.fontSizeHuge
+        }
+        Timer {
+            id: autoSaveTimer
+            interval: 5000
+            onTriggered: saveChanged()
         }
 
     }

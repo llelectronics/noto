@@ -11,6 +11,8 @@ Page {
     property bool firstLoad: false
     property bool todoEdited: false
 
+    //property int indexChanged: -1
+
     showNavigationIndicator: mainWindow.applicationActive ? true : false
 
     Component.onCompleted: {
@@ -29,23 +31,71 @@ Page {
         firstLoad = false;
     }
 
+    ListModel {
+        id: indexChanged
 
+        function add(index) {
+            console.log("[Todo.qml] Add request for indexChanged with index: " + index)
+            if (contains(index)) {
+                console.log("Already there so ignore");
+            }
+            else {
+                append({ "idx": index});
+            }
+        }
+        function contains(index) {
+            for (var i=0; i<count; i++) {
+                if (get(i).idx == index)  { // type transformation is intended here
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+
+    function saveChanged() {
+        //console.log("TodoEdited:" + todoEdited)
+        //console.log(todoPage.listHeaderTextField.text.length)
+        if (todoPage.listHeaderTextField.text.length > 0 && todoEdited === true) {
+            if (indexChanged.count == 0) { // A fallback when index can not be changed. This is much slower then the usual save
+                for (var i = 0; i < todoModel.count; i++) {
+                    console.debug("Save todo " + todoPage.listHeaderTextField.text + " with text: " + todoModel.get(i).todo + " and status:" + todoModel.get(i).status + " and uid:" + todoModel.get(i).uid) // DEBUG
+                    DB.setTodo(todoPage.listHeaderTextField.text,todoModel.get(i).todo,todoModel.get(i).status,todoModel.get(i).uid)
+                }
+            }
+            else {
+                for (var i = 0; i < indexChanged.count; i++) {
+                    console.log("Saving note at " + indexChanged.get(i).idx)
+                    DB.setTodo(todoPage.listHeaderTextField.text,todoModel.get(indexChanged.get(i).idx).todo,todoModel.get(indexChanged.get(i).idx).status,todoModel.get(indexChanged.get(i).idx).uid)
+                    // Don't forget to set indexChanged to -1 to not mess up future saving
+                }
+                indexChanged.clear()
+            }
+            if (dataContainer != null) todoPage.dataContainer.addTodoTitle(todoPage.listHeaderTextField.text)
+            todoEdited = false
+        }
+    }
 
     onStatusChanged: {
         if (status === PageStatus.Deactivating) {
-            //console.log("TodoEdited:" + todoEdited)
-            if (todoPage.listHeaderTextField.text.length > 0 && todoEdited === true) {
-                for (var i = 0; i < todoModel.count; i++) {
-                    //console.debug("Save todo " + todoPage.listHeaderTextField.text + " with text: " + todoModel.get(i).todo + " and status:" + todoModel.get(i).status + " and uid:" + todoModel.get(i).uid) // DEBUG
-                    DB.setTodo(todoPage.listHeaderTextField.text,todoModel.get(i).todo,todoModel.get(i).status,todoModel.get(i).uid)
-                }
-                if (dataContainer != null) todoPage.dataContainer.addTodoTitle(todoPage.listHeaderTextField.text)
-            }
+            saveChanged()
         }
     }
 
     ListModel {
         id: todoModel
+
+        function clearDone() {
+            for (var i=count-1; i>0; i--) {
+                console.debug("[Todo.qml] Todo: " + get(i).todo + " has status: " + get(i).status)
+                if (get(i).status == 1)  { // type transformation is intended here
+                    //console.log("[Todo.qml] Remove done task at index: " + i);
+                    DB.removeTodoEntry(todoPage.listHeaderTextField.text,todoModel.get(i).todo,todoModel.get(i).uid) // Remove from database
+                    remove(i); // Remove visually
+                }
+            }
+        }
     }
 
     function addTodo(todo,status,uid) {
@@ -62,7 +112,7 @@ Page {
         PageHeader {
             TextField {
                 id: todoTitle
-                width: parent.width - 120
+                width: parent.width - 160
                 anchors.left: parent.left
                 anchors.leftMargin: 80
                 anchors.top: parent.top
@@ -102,12 +152,19 @@ Page {
             }
         }
 
+
         ViewPlaceholder {
             enabled: todoList.count == 0
             text: qsTr("Please insert a todo here")
         }
         PullDownMenu {
             visible: mainWindow.applicationActive ? true : false
+            MenuItem {
+                text: "Clear done tasks"
+                onClicked: {
+                    todoModel.clearDone();
+                }
+            }
             MenuItem {
                 text: "Save"
                 onClicked: {
@@ -122,9 +179,11 @@ Page {
 
             }
             MenuItem {
-                text: "Insert Todo"
+                text: "Insert task"
                 onClicked: {
+                    if (firstLoad == true) firstLoad = false;
                     todoModel.append({ "todo": "", "status": 0, "uid" : DB.getUniqueId()});
+                    autoSaveTimer.restart();
                 }
 
             }
@@ -163,11 +222,6 @@ Page {
 
                 width: parent.width
                 height: childrenRect.height
-//                onPressAndHold: {
-//                    if (!contextMenu)
-//                        contextMenu = contextMenuComponent.createObject(notoList)
-//                    contextMenu.show(myListItem)
-//                }
 //                onClicked: {
 //                    console.log("Clicked " + todo)
 //                }
@@ -187,8 +241,17 @@ Page {
                         if (status == 0) return "white"
                         else return "gray"
                     }
+                    readOnly: {
+                        if (status == 0) return false
+                        else return true
+                    }
                     onTextChanged: {
-                        if (firstLoad === true) { todoEdited = false } else { todoEdited = true }
+                        if (firstLoad === true) { todoEdited = false; indexChanged.clear() }
+                        else {
+                            todoEdited = true
+                            indexChanged.add(myListItem.myIndex);
+                            autoSaveTimer.restart()
+                        }
                         //console.debug("todoText textchanged todoedited=" + todoEdited)
                         todoModel.get(index).todo = text
                     }
@@ -207,7 +270,13 @@ Page {
                                         }
                                     }
 
-                    onClicked: firstLoad = false
+                    onClicked: if (! readOnly) firstLoad = false
+
+                    onPressAndHold: {
+                        if (!contextMenu && todoText.readOnly)
+                            contextMenu = contextMenuComponent.createObject(todoList)
+                        contextMenu.show(myListItem)
+                    }
 
                 }
                 Switch {
@@ -225,10 +294,14 @@ Page {
                         if (todoModel.get(index).status == 0)  {
                             todoModel.get(index).status = 1;
                             todoList.move(index,todoModel.count-1);
+                            indexChanged.add(todoModel.count-1);
+                            saveChanged();
                         }
                         else {
-                            todoModel.get(index).status = 0
-                            todoList.move(index,0)
+                            todoModel.get(index).status = 0;
+                            todoList.move(index,0);
+                            indexChanged.add(0);
+                            saveChanged();
                         }
 //                        console.log("Status changed to: " + todoModel.get(index).status + " todoEdited:" + todoEdited) // DEBUG
                     }
@@ -261,11 +334,18 @@ Page {
                     id: menu
                     MenuItem {
                         text: "Delete"
-                        onClicked: menu.parent.remove(1);
+                        onClicked: {
+                            menu.parent.remove(1);
+                        }
                     }
                 }
             }
         }
+    }
+    Timer {
+        id: autoSaveTimer
+        interval: 5000
+        onTriggered: saveChanged()
     }
 
 }
