@@ -31,6 +31,7 @@ import "../config.js" as DB
 
 Page {
     id: root
+    allowedOrientations: Orientation.All
 
     function addNote(title,uid) {
         notoModel.append({"title": title, "type": "note", "uid":uid})
