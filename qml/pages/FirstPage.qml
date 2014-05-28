@@ -37,6 +37,14 @@ Page {
         notoModel.append({"title": title, "type": "note", "uid":uid})
     }
 
+    function updateNote(title,uid) {
+        var contains = notoModel.contains(uid)
+        //console.debug("[FirstPage] updateNote with uid: " + uid + " contains[0]: " + contains[0] + " contains[1]:" + contains[1])
+        if (contains[0]) {
+            notoModel.set(contains[1],{"title": title})
+        }
+    }
+
     function addTodoTitle(title) {
         notoModel.append({"title": title, "type": "todo", "uid": ""})
     }
@@ -60,6 +68,15 @@ Page {
 
     ListModel {
         id: notoModel
+
+        function contains(uid) {
+            for (var i=0; i<count; i++) {
+                if (get(i).uid == uid)  {
+                    return [true, i];
+                }
+            }
+            return [false, i];
+        }
     }
 
     // Place our content in a Column.  The PageHeader is always placed at the top
@@ -130,7 +147,7 @@ Page {
                     console.log("Clicked " + title)
                     if (type === "note") {
                         pageStack.push(Qt.resolvedUrl("Note.qml"), {noteTitleText: title, noteText: DB.getText(title,uid), noteUid: uid} )
-                        console.debug("Text:" + DB.getText(title))
+                        console.debug("Text:" + DB.getText(title,uid))
                     }
                     if (type === "todo") {
                         pageStack.push(Qt.resolvedUrl("Todo.qml"), {todoTitleText: title} )

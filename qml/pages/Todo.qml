@@ -23,6 +23,8 @@ Page {
             //console.log("Get Todos for " + todoTitleText + "...")
             firstLoad = true
             DB.getTodo(todoTitleText);
+            // Renaming of todolist is not supported by database
+            listHeaderTextField.readOnly = true;
 
         }
         //if (noteText != null) note.text = noteText
@@ -82,6 +84,10 @@ Page {
         if (status === PageStatus.Deactivating) {
             saveChanged()
         }
+    }
+
+    RemorsePopup {
+        id: remorse
     }
 
     ListModel {
@@ -163,7 +169,8 @@ Page {
             MenuItem {
                 text: "Clear done tasks"
                 onClicked: {
-                    todoModel.clearDone();
+                    remorse.execute("Clearing done tasks", function() { todoModel.clearDone() })
+                    //todoModel.clearDone();
                 }
             }
             MenuItem {

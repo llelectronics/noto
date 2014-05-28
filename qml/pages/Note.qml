@@ -18,12 +18,14 @@ Page {
 
     function saveChanged() {
         if (noteTitle.text.length > 0 && textEdited === true) {
-            console.log(noteUid)
+            //console.log(noteUid)
             if (noteUid == "0") noteUid = DB.getUniqueId()
-            console.log(noteUid)
+            //console.log(noteUid)
             DB.setNote(noteUid,noteTitle.text,note.text)
             //console.debug("Save note " + noteTitle.text + " with text: " + note.text + " with uid:" + noteUid)
             if (dataContainer != null) page.dataContainer.addNote(noteTitle.text,noteUid)
+            // Update Note title when renaming note
+            firstPage.updateNote(noteTitle.text, noteUid)
         }
     }
 
