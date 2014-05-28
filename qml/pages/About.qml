@@ -49,7 +49,7 @@ Page {
         anchors.horizontalCenter: parent.horizontalCenter
         y: 320
         font.bold: true
-        text: "Noto 1.1"
+        text: "Noto 1.2"
     }
     Text {
         id: desc
