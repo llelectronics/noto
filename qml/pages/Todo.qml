@@ -18,13 +18,17 @@ Page {
 
     Component.onCompleted: {
         if (todoTitleText != null) {
-            todoPage.listHeaderTextField.text = todoTitleText
-            todoPage.listHeaderTextField.forceActiveFocus();
             //console.log("Get Todos for " + todoTitleText + "...")
             firstLoad = true
-            DB.getTodo(todoTitleText);
-            // Renaming of todolist is not supported by database
-            listHeaderTextField.readOnly = true;
+            if (todoTitleText != "") {
+                DB.getTodo(todoTitleText);
+                // Renaming of todolist is not supported by database
+                listHeaderTextField.readOnly = true;
+                todoPage.listHeaderTextField.text = todoTitleText
+            }
+            else {
+                todoPage.listHeaderTextField.forceActiveFocus();
+            }
 
         }
         //if (noteText != null) note.text = noteText
@@ -69,7 +73,7 @@ Page {
             }
             else {
                 for (var i = 0; i < indexChanged.count; i++) {
-                    console.log("Saving note at " + indexChanged.get(i).idx)
+                    console.log("Saving todo at " + indexChanged.get(i).idx)
                     DB.setTodo(todoPage.listHeaderTextField.text,todoModel.get(indexChanged.get(i).idx).todo,todoModel.get(indexChanged.get(i).idx).status,todoModel.get(indexChanged.get(i).idx).uid)
                     // Don't forget to set indexChanged to -1 to not mess up future saving
                 }

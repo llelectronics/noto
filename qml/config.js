@@ -26,7 +26,6 @@ function initialize() {
                     // Create the settings table if it doesn't already exist
                     // If the table exists, this is skipped
                     tx.executeSql('CREATE TABLE IF NOT EXISTS notes(uid LONGVARCHAR UNIQUE, title TEXT,txt TEXT)');
-                    // TODO: Add uid for title, todo
                     tx.executeSql('CREATE TABLE IF NOT EXISTS todos(title TEXT,todo TEXT,status INTEGER,uid LONGVARCHAR)');
                     tx.executeSql('CREATE UNIQUE INDEX IF NOT EXISTS idx ON todos(title,uid);');
                 });
@@ -55,10 +54,6 @@ function setNote(uid,title,txt) {
 
 // This function is used to write todos into the database
 function setTodo(title,todo, status,uid) {
-    // profile: name representing the profile of the soundboard
-    // nr: int representing the position in the soundboard
-    // path: string representing the path to the audio
-    // name: string representing the name of the audio
     var db = getDatabase();
     var res = "";
     //console.debug("todo:" + todo + " uid:" + uid)
