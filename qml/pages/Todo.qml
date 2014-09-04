@@ -98,7 +98,7 @@ Page {
         id: todoModel
 
         function clearDone() {
-            for (var i=count-1; i>0; i--) {
+            for (var i=count-1; i>=0; i--) {
                 console.debug("[Todo.qml] Todo: " + get(i).todo + " has status: " + get(i).status)
                 if (get(i).status == 1)  { // type transformation is intended here
                     //console.log("[Todo.qml] Remove done task at index: " + i);
