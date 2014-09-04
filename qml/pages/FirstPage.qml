@@ -46,7 +46,7 @@ Page {
     }
 
     function addTodoTitle(title) {
-        notoModel.append({"title": title, "type": "todo", "uid": ""})
+        if (!notoModel.containsTitle(title)) notoModel.append({"title": title, "type": "todo", "uid": ""})
     }
 
     function getNotes() {
@@ -76,6 +76,14 @@ Page {
                 }
             }
             return [false, i];
+        }
+        function containsTitle(title) {
+            for (var i=0; i<count; i++) {
+                if (get(i).title == title)  {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 
