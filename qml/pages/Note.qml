@@ -4,7 +4,7 @@ import "../config.js" as DB
 
 Page {
     id: page
-    allowedOrientations: Orientation.All
+    allowedOrientations: defaultAllowedOrientations
 
     property QtObject dataContainer: null
     property string noteTitleText

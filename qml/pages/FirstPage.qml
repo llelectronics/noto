@@ -31,10 +31,13 @@ import "../config.js" as DB
 
 Page {
     id: root
-    allowedOrientations: Orientation.All
+    allowedOrientations: defaultAllowedOrientations
 
     function addNote(title,uid) {
-        notoModel.append({"title": title, "type": "note", "uid":uid})
+        var contains = notoModel.contains(uid)
+        if (!contains[0]) {
+            notoModel.append({"title": title, "type": "note", "uid":uid})
+        }
     }
 
     function updateNote(title,uid) {
@@ -60,9 +63,9 @@ Page {
     Component.onCompleted: {
         // Initialize the database
         DB.initialize();
-        console.log("Get Notes...")
+        //console.log("Get Notes...")
         DB.getNotes();
-        console.log("Get Todos...")
+        //console.log("Get Todos...")
         DB.getTodos();
     }
 
@@ -152,22 +155,35 @@ Page {
                     contextMenu.show(myListItem)
                 }
                 onClicked: {
-                    console.log("Clicked " + title)
+                    //console.log("Clicked " + title)
                     if (type === "note") {
                         pageStack.push(Qt.resolvedUrl("Note.qml"), {noteTitleText: title, noteText: DB.getText(title,uid), noteUid: uid} )
-                        console.debug("Text:" + DB.getText(title,uid))
+                        //console.debug("Text:" + DB.getText(title,uid))
                     }
                     if (type === "todo") {
                         pageStack.push(Qt.resolvedUrl("Todo.qml"), {todoTitleText: title} )
                         //console.debug("Todo:" + DB.getTodo(title)[0])
                     }
                 }
-
+                Image {
+                    id: typeIcon
+                    anchors.left: parent.left
+                    anchors.leftMargin: Theme.paddingSmall
+                    source: {
+                        if (type === "note") "image://theme/icon-l-copy"
+                        else "image://theme/icon-m-levels"
+                    }
+                    height: parent.height
+                    width: height
+                }
                 Label {
-                    x: Theme.paddingLarge
                     text: title
+                    anchors.left: typeIcon.right
+                    anchors.leftMargin: Theme.paddingMedium
                     anchors.verticalCenter: parent.verticalCenter
                     font.capitalization: Font.Capitalize
+                    truncationMode: TruncationMode.Elide
+                    elide: Text.ElideRight
                     color: contentItem.down || menuOpen ? Theme.highlightColor : Theme.primaryColor
                 }
             }

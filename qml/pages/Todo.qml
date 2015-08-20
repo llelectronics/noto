@@ -4,7 +4,7 @@ import "../config.js" as DB
 
 Page {
     id: todoPage
-    allowedOrientations: Orientation.All
+    allowedOrientations: defaultAllowedOrientations
 
     property QtObject dataContainer: null
     property string todoTitleText
@@ -42,7 +42,7 @@ Page {
         id: indexChanged
 
         function add(index) {
-            console.log("[Todo.qml] Add request for indexChanged with index: " + index)
+            //console.log("[Todo.qml] Add request for indexChanged with index: " + index)
             if (contains(index)) {
                 console.log("Already there so ignore");
             }
@@ -67,13 +67,13 @@ Page {
         if (todoPage.listHeaderTextField.text.length > 0 && todoEdited === true) {
             if (indexChanged.count == 0) { // A fallback when index can not be changed. This is much slower then the usual save
                 for (var i = 0; i < todoModel.count; i++) {
-                    console.debug("Save todo " + todoPage.listHeaderTextField.text + " with text: " + todoModel.get(i).todo + " and status:" + todoModel.get(i).status + " and uid:" + todoModel.get(i).uid) // DEBUG
+                    //console.debug("Save todo " + todoPage.listHeaderTextField.text + " with text: " + todoModel.get(i).todo + " and status:" + todoModel.get(i).status + " and uid:" + todoModel.get(i).uid) // DEBUG
                     DB.setTodo(todoPage.listHeaderTextField.text,todoModel.get(i).todo,todoModel.get(i).status,todoModel.get(i).uid)
                 }
             }
             else {
                 for (var i = 0; i < indexChanged.count; i++) {
-                    console.log("Saving todo at " + indexChanged.get(i).idx)
+                    //console.log("Saving todo at " + indexChanged.get(i).idx)
                     DB.setTodo(todoPage.listHeaderTextField.text,todoModel.get(indexChanged.get(i).idx).todo,todoModel.get(indexChanged.get(i).idx).status,todoModel.get(indexChanged.get(i).idx).uid)
                     // Don't forget to set indexChanged to -1 to not mess up future saving
                 }
@@ -99,7 +99,7 @@ Page {
 
         function clearDone() {
             for (var i=count-1; i>=0; i--) {
-                console.debug("[Todo.qml] Todo: " + get(i).todo + " has status: " + get(i).status)
+                //console.debug("[Todo.qml] Todo: " + get(i).todo + " has status: " + get(i).status)
                 if (get(i).status == 1)  { // type transformation is intended here
                     //console.log("[Todo.qml] Remove done task at index: " + i);
                     DB.removeTodoEntry(todoPage.listHeaderTextField.text,todoModel.get(i).todo,todoModel.get(i).uid) // Remove from database

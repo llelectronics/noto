@@ -34,7 +34,7 @@ import Sailfish.Silica 1.0
 
 Page {
     id: page
-    allowedOrientations: Orientation.All
+    allowedOrientations: defaultAllowedOrientations
 
 
     Image {
@@ -49,7 +49,7 @@ Page {
         anchors.horizontalCenter: parent.horizontalCenter
         y: 320
         font.bold: true
-        text: "Noto 1.2"
+        text: "Noto 1.5"
     }
     Text {
         id: desc
