@@ -41,13 +41,13 @@ Page {
         id: logo
         source: "noto.png"
         anchors.horizontalCenter: parent.horizontalCenter
-        y: 200
+        y: page.isPortrait ? 200 : 100
     }
 
     Label {
         id: appName
         anchors.horizontalCenter: parent.horizontalCenter
-        y: 320
+        y: page.isPortrait ? 320 : 220
         font.bold: true
         text: "Noto 1.5"
     }
