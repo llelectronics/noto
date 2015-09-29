@@ -121,13 +121,12 @@ Page {
     Component {
         id: listHeaderComponent
         PageHeader {
+            height: (Theme.itemSizeSmall / 2) + todoTitle.height
             TextField {
                 id: todoTitle
                 width: parent.width - 160
-                anchors.left: parent.left
-                anchors.leftMargin: 80
-                anchors.top: parent.top
-                anchors.topMargin: 25
+                x: 80
+                y: _titleItem.y
                 placeholderText: "Title of Todo"
                 Component.onCompleted: todoPage.listHeaderTextField = todoTitle
                 focus: true
