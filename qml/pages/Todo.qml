@@ -243,7 +243,7 @@ Page {
                     placeholderText: "Enter new todo here"
                     anchors.left: parent.left
                     width: parent.width - todoStatus.width
-                    height: mainWindow.applicationActive ? todoStatus.height + Theme.paddingMedium : todoStatus.height + Theme.paddingLarge
+                    height: mainWindow.applicationActive ? Theme.fontSizeNormal + Theme.paddingMedium : Theme.fontSizeNormal + Theme.paddingLarge
                     anchors.leftMargin: 10
                     focus: true
                     font.pixelSize: mainWindow.applicationActive ? Theme.fontSizeSmall : Theme.fontSizeHuge
