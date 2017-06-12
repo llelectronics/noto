@@ -195,6 +195,7 @@ Page {
                     if (firstLoad == true) firstLoad = false;
                     todoModel.append({ "todo": "", "status": 0, "uid" : DB.getUniqueId()});
                     autoSaveTimer.restart();
+                    todoList.scrollToBottom();
                 }
 
             }

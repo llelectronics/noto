@@ -33,6 +33,10 @@
 #endif
 
 #include <sailfishapp.h>
+#include <QQuickItem>
+#include <QQuickView>
+#include <QGuiApplication>
+#include <QClipboard>
 
 
 int main(int argc, char *argv[])
@@ -46,6 +50,14 @@ int main(int argc, char *argv[])
     //
     // To display the view, call "show()" (will show fullscreen on device).
 
-    return SailfishApp::main(argc, argv);
+    QGuiApplication *app = SailfishApp::application(argc, argv);
+
+    app->setApplicationVersion("1.7");
+    QQuickView *view = SailfishApp::createView();
+    view->setSource(SailfishApp::pathTo("qml/harbour-noto.qml"));
+
+    view->showFullScreen();
+
+    return app->exec();
 }
 
