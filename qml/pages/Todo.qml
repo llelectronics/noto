@@ -228,7 +228,7 @@ Page {
                 todoText.forceActiveFocus();
             }
 
-            //BackgroundItem {
+//            BackgroundItem {
             FocusScope {
                 id: contentItem
 
@@ -245,7 +245,7 @@ Page {
                     anchors.left: parent.left
                     width: parent.width - todoStatus.width
                     height: mainWindow.applicationActive ? Theme.fontSizeNormal + Theme.paddingMedium : Theme.fontSizeNormal + Theme.paddingLarge
-                    anchors.leftMargin: 10
+                    anchors.leftMargin: Theme.paddingMedium
                     focus: true
                     font.pixelSize: mainWindow.applicationActive ? Theme.fontSizeSmall : Theme.fontSizeHuge
 
@@ -257,6 +257,7 @@ Page {
                         if (status == 0) return false
                         else return true
                     }
+
                     onTextChanged: {
                         if (firstLoad === true) { todoEdited = false; indexChanged.clear() }
                         else {
@@ -294,11 +295,12 @@ Page {
                 Switch {
                     id: todoStatus
                     anchors.right: parent.right
-                    anchors.rightMargin: 10
-                    anchors.verticalCenter: todoText.verticalCenter
-                    width: 72
+                    anchors.rightMargin: Theme.paddingMedium
+                    anchors.verticalCenter: todoText.top
+                    anchors.verticalCenterOffset: todoText.textVerticalCenterOffset
+                    width: Theme.itemSizeMedium
                     highlighted: (status == 0)
-                    height: mainWindow.applicationActive ? 77 : 128
+                    height: mainWindow.applicationActive ? Theme.iconSizeMedium: Theme.itemSizeLarge
                     checked: { if (status == 1) true
                         else false }
                     onClicked: {
@@ -324,7 +326,7 @@ Page {
                         contextMenu.show(myListItem)
                     }
                 }
-            }
+            } // Item
 
             Component {
                 id: removalComponent
