@@ -250,8 +250,8 @@ Page {
                     font.pixelSize: mainWindow.applicationActive ? Theme.fontSizeSmall : Theme.fontSizeHuge
 
                     color: {
-                        if (status == 0) return "white"
-                        else return "gray"
+                        if (status == 0) return Theme.primaryColor
+                        else return Theme.secondaryHighlightColor
                     }
                     readOnly: {
                         if (status == 0) return false
@@ -297,6 +297,7 @@ Page {
                     anchors.rightMargin: 10
                     anchors.verticalCenter: todoText.verticalCenter
                     width: 72
+                    highlighted: (status == 0)
                     height: mainWindow.applicationActive ? 77 : 128
                     checked: { if (status == 1) true
                         else false }
