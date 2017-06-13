@@ -24,3 +24,6 @@ OTHER_FILES += qml/harbour-noto.qml \
     rpm/harbour-noto.yaml \
     harbour-noto.desktop
 
+HEADERS += \
+    src/fileio.h
+

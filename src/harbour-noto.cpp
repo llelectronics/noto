@@ -37,6 +37,7 @@
 #include <QQuickView>
 #include <QGuiApplication>
 #include <QClipboard>
+#include "fileio.h"
 
 
 int main(int argc, char *argv[])
@@ -51,9 +52,11 @@ int main(int argc, char *argv[])
     // To display the view, call "show()" (will show fullscreen on device).
 
     QGuiApplication *app = SailfishApp::application(argc, argv);
+    FileIO fileIO;
 
-    app->setApplicationVersion("1.7");
+    app->setApplicationVersion("1.8");
     QQuickView *view = SailfishApp::createView();
+    view->engine()->rootContext()->setContextProperty("_fileio", &fileIO);
     view->setSource(SailfishApp::pathTo("qml/harbour-noto.qml"));
 
     view->showFullScreen();
