@@ -13,6 +13,9 @@ Page {
     // used to detect if text was edited so that we don't always write something to database if we swipe back.
     property bool textEdited: false
 
+    property alias _noteTitle: noteTitle.text
+    property alias _noteText: note.text
+
     showNavigationIndicator: mainWindow.applicationActive ? true : false
 
 
@@ -45,7 +48,29 @@ Page {
         PullDownMenu {
             visible: mainWindow.applicationActive ? true : false
             MenuItem {
-                text: "Save"
+                text: qsTr("Import")
+                onClicked: {
+                    var openDialog = pageStack.push(Qt.resolvedUrl("OpenDialog.qml"),
+                                                    {"dataContainer":  page, "selectMode": false, "filter" : [ "*.txt", "*.htm", "*.html", "*.log" ], "saveMode" : false})
+                    openDialog.fileOpen.connect(function(file) {
+                        //console.debug("Opening file : " + file)
+                        _noteText = _fileio.read(file)
+                    })
+                }
+            }
+
+            MenuItem {
+                text: qsTr("Export")
+                onClicked: {
+                    pageStack.push(Qt.resolvedUrl("OpenDialog.qml"),
+                                   {"dataContainer":  page, "selectMode": true, "filter" : [ "*.txt", "*.html" ], "saveMode" : true})
+
+                    textEdited = false;
+                }
+
+            }
+            MenuItem {
+                text: qsTr("Save")
                 onClicked: {
                     saveChanged();
                     textEdited = false;

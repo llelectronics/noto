@@ -10,7 +10,9 @@ TARGET = harbour-noto
 
 CONFIG += sailfishapp
 
-SOURCES += src/harbour-noto.cpp
+SOURCES += src/harbour-noto.cpp \
+    src/folderlistmodel/fileinfothread.cpp \
+    src/folderlistmodel/qquickfolderlistmodel.cpp
 
 OTHER_FILES += qml/harbour-noto.qml \
     qml/config.js \
@@ -25,5 +27,14 @@ OTHER_FILES += qml/harbour-noto.qml \
     harbour-noto.desktop
 
 HEADERS += \
-    src/fileio.h
+    src/fileio.h \
+    src/folderlistmodel/fileinfothread_p.h \
+    src/folderlistmodel/fileproperty_p.h \
+    src/folderlistmodel/qquickfolderlistmodel.h \
+    src/fmhelper.hpp
+
+DISTFILES += \
+    qml/pages/OpenDialog.qml \
+    qml/pages/InfoBanner.qml \
+    qml/pages/FancyScroller.qml
 

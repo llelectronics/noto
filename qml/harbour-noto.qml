@@ -41,6 +41,14 @@ ApplicationWindow
 
     property Item firstPage
     property alias coverAction: coverAction
+
+    function findBaseName(url) {
+        url = url.toString();
+        var fileName = url.substring(url.lastIndexOf('/') + 1);
+        var dot = fileName.lastIndexOf('.');
+        return dot == -1 ? fileName : fileName.substring(0, dot);
+    }
+
     initialPage: Component {
         FirstPage {
             id: firstPage
@@ -48,6 +56,12 @@ ApplicationWindow
             Component.onCompleted: mainWindow.firstPage = firstPage
         }
     }
+
+    InfoBanner {
+        id: infoBanner
+        z:1
+    }
+
     //cover: Qt.resolvedUrl("cover/CoverPage.qml")
     cover: undefined
     CoverActionList {

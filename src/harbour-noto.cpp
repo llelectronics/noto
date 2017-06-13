@@ -37,8 +37,12 @@
 #include <QQuickView>
 #include <QGuiApplication>
 #include <QClipboard>
-#include "fileio.h"
+#include <QQmlEngine>
+#include <QQmlContext>
 
+#include "fileio.h"
+#include "folderlistmodel/qquickfolderlistmodel.h"
+#include "fmhelper.hpp"
 
 int main(int argc, char *argv[])
 {
@@ -53,10 +57,13 @@ int main(int argc, char *argv[])
 
     QGuiApplication *app = SailfishApp::application(argc, argv);
     FileIO fileIO;
+    FM fileAction;
 
     app->setApplicationVersion("1.8");
     QQuickView *view = SailfishApp::createView();
     view->engine()->rootContext()->setContextProperty("_fileio", &fileIO);
+    view->engine()->rootContext()->setContextProperty("_fm", &fileAction);
+    qmlRegisterType<QQuickFolderListModel>("harbour.noto.FolderListModel", 1, 0, "FolderListModel");
     view->setSource(SailfishApp::pathTo("qml/harbour-noto.qml"));
 
     view->showFullScreen();
