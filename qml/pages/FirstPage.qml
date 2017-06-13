@@ -111,6 +111,12 @@ Page {
                 }
             }
             MenuItem {
+                text: qsTr("Backup Manager")
+                onClicked: {
+                    pageStack.push(Qt.resolvedUrl("BackupPage.qml"))
+                }
+            }
+            MenuItem {
                 text: "Add Note"
                 onClicked: {
                     pageStack.push(Qt.resolvedUrl("Note.qml"), {dataContainer: root, noteUid: 0})

@@ -43,6 +43,7 @@
 #include "fileio.h"
 #include "folderlistmodel/qquickfolderlistmodel.h"
 #include "fmhelper.hpp"
+#include "backupmanager.hpp"
 
 int main(int argc, char *argv[])
 {
@@ -58,11 +59,13 @@ int main(int argc, char *argv[])
     QGuiApplication *app = SailfishApp::application(argc, argv);
     FileIO fileIO;
     FM fileAction;
+    BackupManager backupManager;
 
     app->setApplicationVersion("1.8");
     QQuickView *view = SailfishApp::createView();
     view->engine()->rootContext()->setContextProperty("_fileio", &fileIO);
     view->engine()->rootContext()->setContextProperty("_fm", &fileAction);
+    view->engine()->rootContext()->setContextProperty("_backupManager", &backupManager);
     qmlRegisterType<QQuickFolderListModel>("harbour.noto.FolderListModel", 1, 0, "FolderListModel");
     view->setSource(SailfishApp::pathTo("qml/harbour-noto.qml"));
 

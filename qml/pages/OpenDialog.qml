@@ -25,7 +25,7 @@ Page {
         if (_fm.isFile(path)) {
 
             var mime = _fm.getMime(path);
-            console.debug("[OpenDialog] Detected mimetype: " + mime);
+            //console.debug("[OpenDialog] Detected mimetype: " + mime);
             var mimeinfo = mime.toString().split("/");
 
             if(mimeinfo[0] === "text")
@@ -128,7 +128,7 @@ Page {
                 onClicked: {
                     var err = false;
                     if (_fm.moveMode) {
-                        console.debug("Moving " + _fm.sourceUrl + " to " + findFullPath(fileModel.folder)+ "/" + findBaseName(_fm.sourceUrl));
+                        //console.debug("Moving " + _fm.sourceUrl + " to " + findFullPath(fileModel.folder)+ "/" + findBaseName(_fm.sourceUrl));
                         if (!_fm.moveFile(_fm.sourceUrl,findFullPath(fileModel.folder) + "/" + findBaseName(_fm.sourceUrl))) err = true;
                     }
                     else {
@@ -248,9 +248,13 @@ Page {
                         anotherFM.fileOpen.connect(fileOpen)
                     } else {
                         if (!selectMode) openFile(filePath)
-                        else {
+                        else if (saveMode) {
                             savefilename.text = mainWindow.findBaseName(filePath)
+                        } else {
+                            fileOpen(filePath);
+                            pageStack.pop(dataContainer);
                         }
+
                     }
                 }
                 onPressAndHold: showContextMenu()

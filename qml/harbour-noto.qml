@@ -41,6 +41,7 @@ ApplicationWindow
 
     property Item firstPage
     property alias coverAction: coverAction
+    property alias infoBanner: infoBanner
 
     function findBaseName(url) {
         url = url.toString();

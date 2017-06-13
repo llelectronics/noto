@@ -31,10 +31,15 @@ HEADERS += \
     src/folderlistmodel/fileinfothread_p.h \
     src/folderlistmodel/fileproperty_p.h \
     src/folderlistmodel/qquickfolderlistmodel.h \
-    src/fmhelper.hpp
+    src/fmhelper.hpp \
+    src/backupmanager.hpp
 
 DISTFILES += \
     qml/pages/OpenDialog.qml \
     qml/pages/InfoBanner.qml \
-    qml/pages/FancyScroller.qml
+    qml/pages/FancyScroller.qml \
+    qml/pages/BackupPage.qml
 
+# to disable building translations every time, comment out the
+# following CONFIG line
+CONFIG += sailfishapp_i18n
