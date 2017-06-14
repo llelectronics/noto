@@ -102,12 +102,12 @@ Page {
             console.debug("previous X : " + pinch.previousCenter.x + " current X : " + pinch.center.x)
             console.debug("previous Y : " + pinch.previousCenter.y + " current Y : " + pinch.center.y)
             if (Math.floor(pinch.previousCenter.x) < Math.floor(pinch.center.x) && Math.floor(pinch.previousCenter.y) > Math.floor(pinch.center.y)) {
-                console.debug("Make everything bigger")
+                //console.debug("Make everything bigger")
                 contentItemHeight = Theme.itemSizeSmall
                 contentItemFontSize = Theme.fontSizeSmall
             }
             else if (Math.floor(pinch.previousCenter.x) > Math.floor(pinch.center.x) && Math.floor(pinch.previousCenter.y) < Math.floor(pinch.center.y)) {
-                console.debug("Make everything smaller")
+                //console.debug("Make everything smaller")
                 contentItemHeight = Theme.itemSizeExtraSmall
                 contentItemFontSize = Theme.fontSizeExtraSmall
             }
