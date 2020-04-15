@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import "../config.js" as DB
+import Sailfish.Pickers 1.0
 
 Page {
     id: page
@@ -50,12 +51,13 @@ Page {
             MenuItem {
                 text: qsTr("Import")
                 onClicked: {
-                    var openDialog = pageStack.push(Qt.resolvedUrl("OpenDialog.qml"),
-                                                    {"dataContainer":  page, "selectMode": false, "filter" : [ "*.txt", "*.htm", "*.html", "*.log" ], "saveMode" : false})
-                    openDialog.fileOpen.connect(function(file) {
-                        //console.debug("Opening file : " + file)
-                        _noteText = _fileio.read(file)
-                    })
+//                    var openDialog = pageStack.push(Qt.resolvedUrl("OpenDialog.qml"),
+//                                                    {"dataContainer":  page, "selectMode": false, "filter" : [ "*.txt", "*.htm", "*.html", "*.log" ], "saveMode" : false})
+//                    openDialog.fileOpen.connect(function(file) {
+//                        //console.debug("Opening file : " + file)
+//                        _noteText = _fileio.read(file)
+//                    })
+                  pageStack.push(documentPickerPage)
                 }
             }
 
@@ -135,6 +137,19 @@ Page {
             id: autoSaveTimer
             interval: 5000
             onTriggered: saveChanged()
+        }
+
+        Component {
+            id: documentPickerPage
+            DocumentPickerPage {
+                title: "Select document"
+                onSelectedContentPropertiesChanged: {
+                    if (selectedContentProperties.mimeType.indexOf("text") !== -1)
+                        _noteText = _fileio.read(selectedContentProperties.filePath)
+                    else
+                        infoBanner.showText(qsTr("This file cannot be opened"))
+                }
+            }
         }
 
     }
