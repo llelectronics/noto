@@ -35,6 +35,7 @@ HEADERS += \
     src/backupmanager.hpp
 
 DISTFILES += \
+    qml/pages/Components/NotoModel.qml \
     qml/pages/OpenDialog.qml \
     qml/pages/InfoBanner.qml \
     qml/pages/FancyScroller.qml \

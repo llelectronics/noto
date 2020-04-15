@@ -28,6 +28,7 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import "../config.js" as DB
+import "Components"
 
 Page {
     id: root
@@ -72,26 +73,11 @@ Page {
         DB.getTodos();
     }
 
-    ListModel {
+    NotoModel {
         id: notoModel
-
-        function contains(uid) {
-            for (var i=0; i<count; i++) {
-                if (get(i).uid == uid)  {
-                    return [true, i];
-                }
-            }
-            return [false, i];
-        }
-        function containsTitle(title) {
-            for (var i=0; i<count; i++) {
-                if (get(i).title == title)  {
-                    return true;
-                }
-            }
-            return false;
-        }
     }
+
+
 
     PinchArea {
         width: parent.width
