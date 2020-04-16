@@ -49,7 +49,7 @@ Page {
         anchors.horizontalCenter: parent.horizontalCenter
         y: page.isPortrait ? 320 : 220
         font.bold: true
-        text: "Noto 1.8"
+        text: "Noto 1.9"
     }
     Text {
         id: desc
