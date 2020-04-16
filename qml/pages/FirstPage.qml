@@ -36,24 +36,26 @@ Page {
 
     property int contentItemHeight: Theme.itemSizeSmall
     property int contentItemFontSize: Theme.fontSizeSmall
+    property var searchField
+    property var normalHeader
 
     function addNote(title,uid) {
-        var contains = notoModel.contains(uid)
+        var contains = notesModel.contains(uid)
         if (!contains[0]) {
-            notoModel.append({"title": title, "type": "note", "uid":uid})
+            notesModel.append({"title": title, "type": "note", "uid":uid})
         }
     }
 
     function updateNote(title,uid) {
-        var contains = notoModel.contains(uid)
+        var contains = notesModel.contains(uid)
         //console.debug("[FirstPage] updateNote with uid: " + uid + " contains[0]: " + contains[0] + " contains[1]:" + contains[1])
         if (contains[0]) {
-            notoModel.set(contains[1],{"title": title})
+            notesModel.set(contains[1],{"title": title})
         }
     }
 
     function addTodoTitle(title) {
-        if (!notoModel.containsTitle(title)) notoModel.append({"title": title, "type": "todo", "uid": ""})
+        if (!todoModel.containsTitle(title)) todoModel.append({"title": title, "type": "todo", "uid": ""})
     }
 
     function getNotes() {
@@ -71,10 +73,45 @@ Page {
         DB.getNotes();
         //console.log("Get Todos...")
         DB.getTodos();
+        notoModel.appendNotes();
+        notoModel.appendTodos();
     }
 
     NotoModel {
         id: notoModel
+
+        function appendNotes() {
+            for (var i=0; i<notesModel.count; i++) {
+                append(notesModel.get(i))
+            }
+        }
+        function appendTodos() {
+            for (var i=0; i<todoModel.count; i++) {
+                append(todoModel.get(i))
+            }
+        }
+
+        function update()  {
+            clear()
+            for (var i=0; i<notesModel.count; i++) {
+                if (searchField.text == "" || notesModel.get(i).title.indexOf(searchField.text) >= 0) {
+                    append(notesModel.get(i))
+                }
+            }
+            for (var i=0; i<todoModel.count; i++) {
+                if (searchField.text == "" || todoModel.get(i).title.indexOf(searchField.text) >= 0) {
+                    append(todoModel.get(i))
+                }
+            }
+        }
+    }
+
+    NotoModel {
+        id: notesModel
+    }
+
+    NotoModel {
+        id: todoModel
     }
 
 
@@ -99,6 +136,19 @@ Page {
             }
         }
 
+        SearchField {
+            id: searchField
+            anchors.top: parent.top
+            width: parent.width
+            placeholderText: "Search"
+
+            onTextChanged: {
+                    notoModel.update()
+            }
+            visible: false
+            onVisibleChanged: if (visible) forceActiveFocus()
+        }
+
         // Place our content in a Column.  The PageHeader is always placed at the top
         // of the page, followed by our content.
         SilicaListView {
@@ -107,7 +157,10 @@ Page {
             height: root.height
             anchors.top: parent.top
             model: notoModel
-            header: PageHeader { title: "Noto" }
+            header: PageHeader {
+                title: "Noto"
+                _titleItem.visible: !searchField.visible
+            }
             ViewPlaceholder {
                 enabled: notoList.count == 0
                 text: qsTr("Please create a note or todo")
@@ -134,6 +187,10 @@ Page {
                 MenuItem {
                     text: "Add Todo"
                     onClicked: pageStack.push(Qt.resolvedUrl("Todo.qml"),{dataContainer: root})
+                }
+                MenuItem {
+                    text: "Search"
+                    onClicked: searchField.visible = !searchField.visible
                 }
             }
             PushUpMenu {
