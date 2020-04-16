@@ -44,6 +44,7 @@ Page {
         if (!contains[0]) {
             notesModel.append({"title": title, "type": "note", "uid":uid})
         }
+        notoModel.update()
     }
 
     function updateNote(title,uid) {
@@ -56,6 +57,7 @@ Page {
 
     function addTodoTitle(title) {
         if (!todoModel.containsTitle(title)) todoModel.append({"title": title, "type": "todo", "uid": ""})
+        notoModel.update()
     }
 
     function getNotes() {
@@ -73,23 +75,10 @@ Page {
         DB.getNotes();
         //console.log("Get Todos...")
         DB.getTodos();
-        notoModel.appendNotes();
-        notoModel.appendTodos();
     }
 
     NotoModel {
         id: notoModel
-
-        function appendNotes() {
-            for (var i=0; i<notesModel.count; i++) {
-                append(notesModel.get(i))
-            }
-        }
-        function appendTodos() {
-            for (var i=0; i<todoModel.count; i++) {
-                append(todoModel.get(i))
-            }
-        }
 
         function update()  {
             clear()
