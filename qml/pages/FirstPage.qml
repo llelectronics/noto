@@ -109,16 +109,23 @@ Page {
         width: parent.width
         height: parent.height
 
+        property bool pinchIn: false
         onPinchUpdated: {
-            // adjust content pos due to drag
-            console.debug("previous X : " + pinch.previousCenter.x + " current X : " + pinch.center.x)
-            console.debug("previous Y : " + pinch.previousCenter.y + " current Y : " + pinch.center.y)
-            if (Math.floor(pinch.previousCenter.x) < Math.floor(pinch.center.x) && Math.floor(pinch.previousCenter.y) > Math.floor(pinch.center.y)) {
+            if (pinch.previousScale < pinch.scale) {
+                pinchIn = true
+            }
+            else if (pinch.previousScale > pinch.scale) {
+                pinchIn = false
+            }
+        }
+
+        onPinchFinished: {
+            if (pinchIn) {
                 //console.debug("Make everything bigger")
                 contentItemHeight = Theme.itemSizeSmall
                 contentItemFontSize = Theme.fontSizeSmall
             }
-            else if (Math.floor(pinch.previousCenter.x) > Math.floor(pinch.center.x) && Math.floor(pinch.previousCenter.y) < Math.floor(pinch.center.y)) {
+            else {
                 //console.debug("Make everything smaller")
                 contentItemHeight = Theme.itemSizeExtraSmall
                 contentItemFontSize = Theme.fontSizeExtraSmall
