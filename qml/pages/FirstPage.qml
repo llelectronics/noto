@@ -210,7 +210,18 @@ Page {
                 function remove() {
                     var removal = removalComponent.createObject(myListItem)
                     ListView.remove.connect(removal.deleteAnimation.start)
-                    removal.execute(contentItem, "Deleting", function() { if (type != "note") uid = 0; DB.remove(title,type,uid); notoModel.remove(index); } )
+                    removal.execute(contentItem, "Deleting", function() {
+                        if (type != "note") uid = 0;
+                        DB.remove(title,type,uid);
+                        if (type == "note") {
+                            var contains = notesModel.contains(uid);
+                            if (contains[0]) notesModel.remove(contains[1])
+                        }
+                        else {
+                            todoModel.removeTitle(title)
+                        }
+                        notoModel.remove(index);
+                    } )
                 }
 
                 BackgroundItem {

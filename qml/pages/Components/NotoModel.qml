@@ -19,4 +19,11 @@ ListModel {
         }
         return false;
     }
+    function removeTitle(title) {
+        for (var i=0; i<count; i++) {
+            if (get(i).title == title)  {
+                remove(i);
+            }
+        }
+    }
 }
