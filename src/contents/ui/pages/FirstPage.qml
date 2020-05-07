@@ -200,30 +200,30 @@ Kirigami.Page {
                     Layout.fillWidth: true
                     text: title
                 }
-                Controls.Menu {
-                    id: menu
-                    Controls.MenuItem {
-                        text: qsTr("Delete")
-                        icon.name: "edit-delete"
-                        onClicked: {
-                            _curTitle = title
-                            _curType = type
-                            _curUid = uid
-                            _curIndex = index
-                            deleteDrawer.open();
-                            print("Delete " + title + " clicked")
-                        }
-                    }
-                }
-                MouseArea {
-                    anchors.fill: parent
-                    acceptedButtons: Qt.RightButton
-                    onReleased: { 
-                        if (mouse.button === Qt.RightButton) {
-                            menu.popup()
-                        }
-                    }
-                }
+//                 Controls.Menu {
+//                     id: menu
+//                     Controls.MenuItem {
+//                         text: qsTr("Delete")
+//                         icon.name: "edit-delete"
+//                         onClicked: {
+//                             _curTitle = title
+//                             _curType = type
+//                             _curUid = uid
+//                             _curIndex = index
+//                             deleteDrawer.open();
+//                             print("Delete " + title + " clicked")
+//                         }
+//                     }
+//                 }
+//                 MouseArea {
+//                     anchors.fill: parent
+//                     acceptedButtons: Qt.RightButton
+//                     onReleased: { 
+//                         if (mouse.button === Qt.RightButton) {
+//                             menu.popup()
+//                         }
+//                     }
+//                 }
             }
             onClicked: { //showPassiveNotification("Clicked "+ title)
                 if (type === "note") 
