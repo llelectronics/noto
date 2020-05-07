@@ -1,0 +1,3 @@
+kirigami 2.4
+QtQuick.Controls
+qml-module-qt-labs-platform

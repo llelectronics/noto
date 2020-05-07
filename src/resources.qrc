@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="main.qml">contents/ui/main.qml</file>
+        <file alias="FirstPage.qml">contents/ui/pages/FirstPage.qml</file>
+        <file alias="NotoModel.qml">contents/ui/pages/NotoModel.qml</file>
+        <file alias="NotePage.qml">contents/ui/pages/NotePage.qml</file>
+        <file alias="config.js">contents/ui/pages/config.js</file>
+    </qresource>
+</RCC>

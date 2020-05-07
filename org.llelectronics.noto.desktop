@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Noto
+Comment=Note taking and todo app
+Version=1.0
+Exec=noto
+MimeType=application/x-noto;
+Icon=noto
+Type=Application
+Terminal=false
+Categories=Qt;KDE;

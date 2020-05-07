@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="desktop-application">
+  <id>org.llelectronics.noto</id>
+  <name>Noto</name>
+  <summary>A small note taking and todo application</summary>
+  <metadata_license>FSFAP</metadata_license>
+  <project_license>BSD (3-clause)</project_license>
+  <developer_name>llelectronics</developer_name>
+  <description>
+    <p>Take notes and save them. Aswell as creating todo lists</p>
+  </description>
+</component>
