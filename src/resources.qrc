@@ -4,6 +4,7 @@
         <file alias="FirstPage.qml">contents/ui/pages/FirstPage.qml</file>
         <file alias="NotoModel.qml">contents/ui/pages/NotoModel.qml</file>
         <file alias="NotePage.qml">contents/ui/pages/NotePage.qml</file>
+        <file alias="TodoPage.qml">contents/ui/pages/TodoPage.qml</file>
         <file alias="config.js">contents/ui/pages/config.js</file>
     </qresource>
 </RCC>

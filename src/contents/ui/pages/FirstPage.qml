@@ -99,6 +99,10 @@ Kirigami.Page {
         right: Kirigami.Action {
             text: "New Todo"
             iconName: "story-editor"
+            onTriggered: {
+                createNewSheet.type = qsTr("todo")
+                createNewSheet.open()
+            }
         }
 //         contextualActions: [
 //             Kirigami.Action {...},
@@ -228,6 +232,8 @@ Kirigami.Page {
             onClicked: { //showPassiveNotification("Clicked "+ title)
                 if (type === "note") 
                     pageStack.push(Qt.resolvedUrl("qrc:///NotePage.qml"), { dataContainer: root, noteTitle: title, uid: uid, noteBody: DB.getText(title,uid)})
+                else if (type === "todo")
+                    pageStack.push(Qt.resolvedUrl("qrc:///TodoPage.qml"), { dataContainer: root, todoTitleText: title })
             }
             actions: [
             Kirigami.Action {
@@ -348,7 +354,10 @@ Kirigami.Page {
                     highlighted: true
                     enabled: newText.text.length > 0
                     onClicked: {
-                        pageStack.push(Qt.resolvedUrl("qrc:///NotePage.qml"),{dataContainer: root, noteTitle: newText.text, uid: DB.getUniqueId(), noteBody: ""})
+                        if (createNewSheet.type == "note")
+                            pageStack.push(Qt.resolvedUrl("qrc:///NotePage.qml"),{dataContainer: root, noteTitle: newText.text, uid: DB.getUniqueId(), noteBody: ""})
+                        else (createNewSheet.type == "todo")
+                            pageStack.push(Qt.resolvedUrl("qrc:///TodoPage.qml"),{dataContainer: root, todoTitleText: newText.text, uid: DB.getUniqueId()})
                         newText.text = ""
                         createNewSheet.close()
                     }
