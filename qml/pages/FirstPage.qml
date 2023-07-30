@@ -251,7 +251,7 @@ Page {
                         anchors.left: parent.left
                         anchors.leftMargin: Theme.paddingSmall
                         source: {
-                            if (type === "note") "image://theme/icon-l-copy"
+                            if (type === "note") "image://theme/icon-l-clipboard"
                             else "image://theme/icon-m-levels"
                         }
                         height: parent.height
